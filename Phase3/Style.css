@@ -74,3 +74,88 @@ button,
 .switch a {
   color: #000;
 }
+
+#adminLink,
+#adminBackBtn {
+  display: block;
+  width: 100%;
+  padding: 9px;
+  margin-top: 10px;
+  background: #fff;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 6px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.secondary-link {
+  display: block;
+  text-align: center;
+  font-size: 13px;
+  margin-top: 10px;
+  color: #666;
+}
+
+/* Admin page — extends .container without breaking login/signup card */
+.container.admin {
+  max-width: 560px;
+}
+
+.table-wrap {
+  margin-top: 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 420px;
+}
+
+th,
+td {
+  border-bottom: 1px solid #eee;
+  padding: 8px 10px;
+  text-align: left;
+  word-break: break-all;
+}
+
+th {
+  background: #f7f7f7;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #555;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr.is-current {
+  background: #fffbe6;
+}
+
+td.empty {
+  text-align: center;
+  color: #888;
+  padding: 18px 10px;
+}
+
+.admin-count {
+  font-size: 12px;
+  color: #888;
+  margin-top: 8px;
+  text-align: right;
+}
+
+#adminCurrentUser {
+  font-weight: 700;
+  color: #000;
+}

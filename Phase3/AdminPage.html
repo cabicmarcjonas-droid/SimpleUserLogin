@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OPSEC Admin</title>
+    <link rel="stylesheet" href="Style.css" />
+  </head>
+  <body>
+    <div class="container admin">
+      <h1>Admin Dashboard</h1>
+      <p class="subtitle">
+        Currently logged in as:
+        <span id="adminCurrentUser">(none)</span>
+      </p>
+
+      <!-- INSECURE: no admin auth check — anyone can open AdminPage.html directly -->
+      <!-- Future hook: add search / filter / delete / role toggle inside #adminActions -->
+      <div id="adminActions"></div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Email / Username</th>
+              <th>Password</th>
+              <th>Confirm Password</th>
+            </tr>
+          </thead>
+          <tbody id="adminUserTable"></tbody>
+        </table>
+      </div>
+
+      <p id="adminCount" class="admin-count"></p>
+
+      <a href="LandingPage.html" id="adminBackBtn">Back to Dashboard</a>
+      <a href="LoginPage.html" class="secondary-link">Go to Login</a>
+    </div>
+
+    <script src="index.js"></script>
+  </body>
+</html>
