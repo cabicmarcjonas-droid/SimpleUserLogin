@@ -1,0 +1,81 @@
+require("dotenv").config();
+const express = require("express");
+const path = require("path");
+const cors = require("cors");
+const connectDB = require("./config/db");
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Simple request log
+app.use((req, _res, next) => {
+  console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
+  next();
+});
+
+// Health check — always works, even if DB not connected
+app.get("/health", (_req, res) => {
+  const states = ["disconnected", "connected", "connecting", "disconnecting"];
+  const mongoose = require("mongoose");
+  res.json({
+    status: "ok",
+    db: states[mongoose.connection.readyState] || "unknown",
+    time: new Date().toISOString(),
+  });
+});
+
+// Auth API
+app.use("/api/auth", require("./routes/auth"));
+
+// Serve polished frontend statically from same Phase5 folder
+// IMPORTANT: do not expose .env, node_modules, server internals via static
+const staticRoot = __dirname;
+app.use(
+  express.static(staticRoot, {
+    index: false,
+    // block sensitive files if requested directly
+    setHeaders(res, filePath) {
+      if (filePath.endsWith(".env") || filePath.includes("node_modules") || filePath.endsWith("server.js")) {
+        res.setHeader("Cache-Control", "no-store");
+      }
+    },
+  }),
+);
+
+// Explicit file blocks (return 404 instead of file content)
+app.get("/.env", (_req, res) => res.status(404).send("Not found"));
+app.get("/server.js", (_req, res) => res.status(404).send("Not found"));
+
+// Root → Login
+app.get("/", (_req, res) => {
+  res.sendFile(path.join(__dirname, "LoginPage.html"));
+});
+
+// 404 for unknown API
+app.use("/api", (_req, res) => res.status(404).json({ message: "API route not found" }));
+
+// Start: connect DB (non-blocking) then listen
+(async () => {
+  await connectDB(process.env.MONGODB_URI);
+  const uri = process.env.MONGODB_URI || "";
+  const isPlaceholderSrv = !uri || uri.includes("xxxxx") || /PASSWORD/i.test(uri) || uri.includes("<") || uri.includes(">");
+  if (isPlaceholderSrv) {
+    console.log("\n[INFO] MONGODB_URI still placeholder — set real Atlas URI in Phase5/.env:");
+    console.log("       MONGODB_URI=mongodb+srv://appuser:PASSWORD@cluster0.xxx.mongodb.net/userlogin?retryWrites=true&w=majority");
+    console.log("       Then restart: npm run dev\n");
+  }
+  if (!process.env.JWT_SECRET || process.env.JWT_SECRET.includes("dev-only")) {
+    console.warn("[WARN] JWT_SECRET is placeholder. Run: node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\" and paste into Phase5/.env");
+  }
+
+  app.listen(PORT, () => {
+    console.log(`[Server] Listening on http://localhost:${PORT}`);
+    console.log(`[Server] Health: http://localhost:${PORT}/health`);
+    console.log(`[Server] Login:  http://localhost:${PORT}/LoginPage.html`);
+  });
+})();

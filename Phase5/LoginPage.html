@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login — Insecure Demo</title>
+    <title>OPSEC Login</title>
     <link rel="stylesheet" href="Style.css" />
   </head>
   <body>
@@ -12,12 +12,13 @@
       <p class="subtitle">Log in to Continue</p>
 
       <form id="loginForm" novalidate>
-        <label for="loginEmail">Email / Username</label>
-        <input id="loginEmail" type="text" />
+        <label for="loginEmail">Email</label>
+        <input id="loginEmail" type="email" required autocomplete="email" />
 
         <label for="loginPassword">Password</label>
-        <input id="loginPassword" type="text" />
+        <input id="loginPassword" type="password" required autocomplete="current-password" />
 
+        <div id="loginError" class="error" aria-live="polite"></div>
         <button type="submit">Login</button>
       </form>
 
