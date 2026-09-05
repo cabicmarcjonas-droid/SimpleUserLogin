@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign Up — Insecure Demo</title>
+    <title>OPSEC Sign Up</title>
     <link rel="stylesheet" href="Style.css" />
   </head>
   <body>
@@ -12,15 +12,16 @@
       <p class="subtitle">Sign Up to get Started</p>
 
       <form id="signupForm" novalidate>
-        <label for="signupEmail">Email / Username</label>
-        <input id="signupEmail" type="text" />
+        <label for="signupEmail">Email</label>
+        <input id="signupEmail" type="email" required autocomplete="email" />
 
         <label for="signupPassword">Password</label>
-        <input id="signupPassword" type="text" />
+        <input id="signupPassword" type="password" required autocomplete="new-password" />
 
         <label for="signupConfirmPassword">Confirm Password</label>
-        <input id="signupConfirmPassword" type="text" />
+        <input id="signupConfirmPassword" type="password" required autocomplete="new-password" />
 
+        <div id="signupError" class="error" aria-live="polite"></div>
         <button type="submit">Sign Up</button>
       </form>
 

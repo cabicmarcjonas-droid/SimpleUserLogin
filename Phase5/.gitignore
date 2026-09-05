@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+
+# Env — NEVER commit real MONGODB_URI / JWT_SECRET
+.env
+
+# Logs
+npm-debug.log*
+logs/
+
+# OS
+.DS_Store
+Thumbs.db

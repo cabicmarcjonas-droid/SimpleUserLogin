@@ -5,18 +5,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const welcomeMsg = document.getElementById("welcomeMsg");
   const welcomeTitle = document.getElementById("welcomeTitle");
 
-  let fakeUsers = [];
+  let users = [];
   try {
-    fakeUsers = JSON.parse(localStorage.getItem("fakeUsers") || "[]");
+    users = JSON.parse(localStorage.getItem("users") || "[]");
   } catch (e) {
-    fakeUsers = [];
+    users = [];
   }
 
-  function saveFakeUsers() {
-    localStorage.setItem("fakeUsers", JSON.stringify(fakeUsers));
+  function saveUsers() {
+    localStorage.setItem("users", JSON.stringify(users));
   }
 
-  //LOGIN
   if (loginForm) {
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -24,15 +23,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const email = document.getElementById("loginEmail").value;
       const password = document.getElementById("loginPassword").value;
 
-      fakeUsers.push({ email: email, password: password });
-      saveFakeUsers();
-      localStorage.setItem("fakeLoggedInUser", email || "guest");
+      users.push({ email: email, password: password });
+      saveUsers();
+      localStorage.setItem("currentUser", email || "guest");
 
       window.location.href = "LandingPage.html";
     });
   }
 
-  //SIGN UP
   if (signupForm) {
     signupForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -43,31 +41,29 @@ document.addEventListener("DOMContentLoaded", () => {
         "signupConfirmPassword",
       ).value;
 
-      fakeUsers.push({
+      users.push({
         email: email,
         password: password,
         confirmPassword: confirmPassword,
       });
-      saveFakeUsers();
-      localStorage.setItem("fakeLoggedInUser", email || "guest");
+      saveUsers();
+      localStorage.setItem("currentUser", email || "guest");
 
       window.location.href = "LandingPage.html";
     });
   }
 
-  // LANDING PAGE
   if (welcomeMsg || welcomeTitle) {
-    const user = localStorage.getItem("fakeLoggedInUser");
+    const user = localStorage.getItem("currentUser");
     if (user && welcomeTitle) {
       welcomeTitle.textContent = `Welcome, ${user}! You are logged in.`;
     }
   }
 
-  //LOGOUT
   if (logoutBtn) {
     logoutBtn.addEventListener("click", (e) => {
       e.preventDefault();
-      localStorage.removeItem("fakeLoggedInUser");
+      localStorage.removeItem("currentUser");
       window.location.href = "LoginPage.html";
     });
   }

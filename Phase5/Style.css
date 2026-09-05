@@ -74,3 +74,29 @@ button,
 .switch a {
   color: #000;
 }
+
+.secondary-link {
+  display: block;
+  text-align: center;
+  font-size: 13px;
+  margin-top: 10px;
+  color: #666;
+}
+
+.error {
+  color: #c0392b;
+  font-size: 13px;
+  margin-top: 10px;
+  min-height: 18px;
+  text-align: center;
+  word-break: break-word;
+}
+
+.input-error {
+  border-color: #c0392b !important;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

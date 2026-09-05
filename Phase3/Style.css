@@ -74,3 +74,11 @@ button,
 .switch a {
   color: #000;
 }
+
+.secondary-link {
+  display: block;
+  text-align: center;
+  font-size: 13px;
+  margin-top: 10px;
+  color: #666;
+}
