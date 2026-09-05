@@ -7,12 +7,10 @@ const connectDB = require("./config/db");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Simple request log
 app.use((req, _res, next) => {
   console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
   next();
@@ -29,10 +27,8 @@ app.get("/health", (_req, res) => {
   });
 });
 
-// Auth API
 app.use("/api/auth", require("./routes/auth"));
 
-// Serve polished frontend statically from same Phase5 folder
 // IMPORTANT: do not expose .env, node_modules, server internals via static
 const staticRoot = __dirname;
 app.use(
@@ -47,19 +43,16 @@ app.use(
   }),
 );
 
-// Explicit file blocks (return 404 instead of file content)
+// Block sensitive files — return 404 instead of content
 app.get("/.env", (_req, res) => res.status(404).send("Not found"));
 app.get("/server.js", (_req, res) => res.status(404).send("Not found"));
 
-// Root → Login
 app.get("/", (_req, res) => {
   res.sendFile(path.join(__dirname, "LoginPage.html"));
 });
 
-// 404 for unknown API
 app.use("/api", (_req, res) => res.status(404).json({ message: "API route not found" }));
 
-// Start: connect DB (non-blocking) then listen
 (async () => {
   await connectDB(process.env.MONGODB_URI);
   const uri = process.env.MONGODB_URI || "";

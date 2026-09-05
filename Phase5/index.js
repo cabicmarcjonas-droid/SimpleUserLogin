@@ -1,6 +1,4 @@
-// Phase5 polished frontend — connected to Express + MongoDB Atlas backend
-// All auth via /api/auth/*, JWT stored in localStorage as 'token'
-
+// Frontend — Express + MongoDB Atlas, auth via /api/auth/*, JWT in localStorage
 document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("loginForm");
   const signupForm = document.getElementById("signupForm");
@@ -12,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const landingError = document.getElementById("landingError");
 
   const TOKEN_KEY = "token";
-  const USER_KEY = "currentUser"; // for display fallback
+  const USER_KEY = "currentUser";
 
   function getToken() {
     return localStorage.getItem(TOKEN_KEY);
@@ -24,7 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function clearSession() {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
-    // clean legacy keys
     localStorage.removeItem("currentUser");
     localStorage.removeItem("users");
     localStorage.removeItem("fakeLoggedInUser");
@@ -49,7 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return data;
   }
 
-  // --- LOGIN ---
   if (loginForm) {
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -70,15 +66,13 @@ document.addEventListener("DOMContentLoaded", () => {
         setSession(data.token, data.user?.email || email);
         window.location.href = "LandingPage.html";
       } catch (err) {
-        // 503 = DB not connected — give actionable hint
-        showError(loginError, err.message.includes("503") || err.message.includes("Database not connected") ? err.message : err.message);
+        showError(loginError, err.message);
       } finally {
         setLoading(btn, false);
       }
     });
   }
 
-  // --- SIGNUP ---
   if (signupForm) {
     signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -117,12 +111,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- LANDING (protected) ---
   if (welcomeTitle) {
     (async () => {
       const token = getToken();
       if (!token) {
-        // No session — redirect to login (keep polished default hidden)
         window.location.href = "LoginPage.html";
         return;
       }
@@ -138,18 +130,15 @@ document.addEventListener("DOMContentLoaded", () => {
           welcomeSub.textContent = d ? `Member since ${d}` : "";
         }
       } catch (err) {
-        // 401 or DB not ready → back to login
         showError(landingError, err.message);
         if (err.message.toLowerCase().includes("token") || err.message.includes("401") || err.message.includes("authorization")) {
           clearSession();
-          // small delay so user sees error before redirect
           setTimeout(() => (window.location.href = "LoginPage.html"), 1200);
         }
       }
     })();
   }
 
-  // --- LOGOUT ---
   if (logoutBtn) {
     logoutBtn.addEventListener("click", (e) => {
       e.preventDefault();
